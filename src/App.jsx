@@ -1,30 +1,49 @@
 import React, {useState, useEffect} from 'react'
 import Search from "./Components/Search.jsx";
 import Spinner from "./Components/Spinner.jsx";
+import MovieCard from "./Components/MovieCard.jsx";
 
-const API_BASE_URL = "https://api.themoviedb.org/3";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
 const API_OPTIONS = {
     method: 'GET',
     headers: {
         accept: 'application/json',
-        Authorization: `Bearer ${API_KEY}` //this is verify who want to access the API
+        Authorization: `Bearer ${API_KEY}`
     }
 };
+
+function useDebounce(value, delay = 500) {
+    const [debouncedValue, setDebouncedValue] = useState(value);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedValue(value);
+        }, delay);
+
+        return () => clearTimeout(handler); // cleanup
+    }, [value, delay]);
+
+    return debouncedValue;
+}
 
 const App = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [movieList, setMovieList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const debouncedSearch = useDebounce(searchTerm, 500);
 
-    const fetchMovies = async (query) => {
+
+    const fetchMovies = async (query = '') => {
         setLoading(true);
         setErrorMessage('');
 
         try {
-            const endpoint = `&{API_BASE_URL}/discover/movie?short_by_=popularity.desc`;
+            const endpoint = query
+                ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&api_key=${API_KEY}`
+                :`${API_BASE_URL}/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`;
 
             const response = await fetch(endpoint, API_OPTIONS)
 
@@ -49,8 +68,8 @@ const App = () => {
         }
     }
     useEffect(() => {
-        fetchMovies();
-    }, []);
+        fetchMovies(debouncedSearch);
+    }, [debouncedSearch]);
 
     return (
         <>
@@ -65,8 +84,8 @@ const App = () => {
                         <Search serachTerm={searchTerm} setSearchTerm={setSearchTerm}/>
                     </header>
 
-                    <section className="ALl Movies">
-                        <h2 className="mt-[40spx]">All Movies</h2>
+                    <section className="all-movies">
+                        <h2 className="mt-[40px]">All Movies</h2>
 
                         {loading ? (
                             <Spinner/>
@@ -74,8 +93,10 @@ const App = () => {
                             <p className="text-red-500">{errorMessage}</p>
                         ) : (
                             <ul>
-                                {movieList.map((movie) => (
-                                    <p key={movie.id} className="text-white">{movie.title}</p>
+                                {movieList.map(movie => (
+                                    <li key={movie.id}>
+                                        <MovieCard movie={movie} />
+                                    </li>
                                 ))}
                             </ul>
                         )}
