@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+    <!-- Dark circular background -->
+    <circle cx="32" cy="32" r="32" fill="#0f172a"/>
+
+    <!-- Crescent moon with film strip cutouts -->
+    <path d="M40 32a16 16 0 1 1-24-14 16 16 0 0 0 24 14z" fill="#facc15"/>
+
+    <!-- Film strip holes -->
+    <rect x="28" y="22" width="2" height="4" fill="#0f172a"/>
+    <rect x="28" y="28" width="2" height="4" fill="#0f172a"/>
+    <rect x="28" y="34" width="2" height="4" fill="#0f172a"/>
+</svg>

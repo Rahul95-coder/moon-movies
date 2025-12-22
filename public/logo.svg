@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="80" viewBox="0 0 300 80">
+    <!-- Dark circular background -->
+    <circle cx="40" cy="40" r="36" fill="#0f172a"/>
+
+    <!-- Crescent moon with film strip cutouts -->
+    <path d="M52 40a20 20 0 1 1-30-18 20 20 0 0 0 30 18z" fill="#facc15"/>
+
+    <!-- Film strip holes -->
+    <rect x="36" y="28" width="3" height="6" fill="#0f172a"/>
+    <rect x="36" y="36" width="3" height="6" fill="#0f172a"/>
+    <rect x="36" y="44" width="3" height="6" fill="#0f172a"/>
+
+    <!-- Text -->
+    <text x="90" y="50" font-family="Arial, sans-serif" font-size="32" fill="#f8fafc">
+        Moon_Movies
+    </text>
+
+    <!-- Optional stars for cinematic effect -->
+    <circle cx="220" cy="20" r="3" fill="#facc15"/>
+    <circle cx="240" cy="30" r="2" fill="#facc15"/>
+    <circle cx="260" cy="15" r="2" fill="#facc15"/>
+</svg>
