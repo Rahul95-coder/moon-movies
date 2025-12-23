@@ -1,4 +1,4 @@
-import {Client, Databases, Query, ID} from "appwrite";
+import {Client, Databases, Query, Account, ID} from "appwrite";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -8,6 +8,7 @@ const client = new Client()
     .setEndpoint("https://tor.cloud.appwrite.io/v1")
     .setProject(PROJECT_ID);
 
+const account = new Account(client);
 const database = new Databases(client);
 
 export const updateSearchCount = async (searchTerm, movie) => {
@@ -69,3 +70,5 @@ export const getTrendingMovies = async () =>{
         console.error(err);
     }
 }
+
+export { account };
