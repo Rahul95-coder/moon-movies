@@ -1,4 +1,4 @@
-import {Client, Databases, Query, Account, ID} from "appwrite";
+import { Client, Databases, Query, Account, ID } from "appwrite";
 
 const PROJECT_ID = import.meta.env.VITE_APPWRITE_PROJECT_ID;
 const DATABASE_ID = import.meta.env.VITE_APPWRITE_DATABASE_ID;
@@ -9,18 +9,15 @@ const client = new Client()
     .setProject(PROJECT_ID);
 
 const account = new Account(client);
-const database = new Databases(client);
+const databases = new Databases(client);
 
+// 🔹 Update search count
 export const updateSearchCount = async (searchTerm, movie) => {
-
-    const term = typeof searchTerm === "string"
-        ? searchTerm.trim()
-        : "";
-
+    const term = typeof searchTerm === "string" ? searchTerm.trim() : "";
     if (!term || !movie?.id) return;
 
     try {
-        const result = await database.listDocuments(
+        const result = await databases.listDocuments(
             DATABASE_ID,
             COLLECTION_ID,
             [Query.equal("searchTerm", [term])]
@@ -29,7 +26,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
         if (result.documents.length > 0) {
             const doc = result.documents[0];
 
-            await database.updateDocument(
+            await databases.updateDocument(
                 DATABASE_ID,
                 COLLECTION_ID,
                 doc.$id,
@@ -38,7 +35,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
                 }
             );
         } else {
-            await database.createDocument(
+            await databases.createDocument(
                 DATABASE_ID,
                 COLLECTION_ID,
                 ID.unique(),
@@ -50,25 +47,28 @@ export const updateSearchCount = async (searchTerm, movie) => {
                 }
             );
         }
-    } catch (e) {
-        console.error("Appwrite error:", e);
+    } catch (error) {
+        console.error("Appwrite updateSearchCount error:", error);
     }
 };
 
-export const getTrendingMovies = async () =>{
-    try{
-        const result = await database.listDocuments(
+// 🔹 Get trending movies
+export const getTrendingMovies = async () => {
+    try {
+        const result = await databases.listDocuments(
             DATABASE_ID,
             COLLECTION_ID,
             [
                 Query.orderDesc("count"),
-                Query.limit(10)
+                Query.limit(10),
             ]
         );
+
         return result.documents;
-    }catch(err){
-        console.error(err);
+    } catch (error) {
+        console.error("Appwrite getTrendingMovies error:", error);
+        return [];
     }
-}
+};
 
 export { account };
